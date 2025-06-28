@@ -5,12 +5,19 @@ namespace ECommerce.OrderService.Core.Entity
     public class Order
     {
         public int Id { get; set; }
-
         [Required]
         public int UserId { get; set; }
+        public DateTime DateCreated { get; set; } = DateTime.Now;
+        public ICollection<OrderItem>? OrderItems { get; set; }
+        public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
+    }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        public ICollection<OrderItem>? Items { get; set; }
+    public enum OrderStatus
+    {
+        Pending,
+        Processing,
+        Shipped,
+        Delivered,
+        Cancelled
     }
 }
