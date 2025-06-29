@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.OrderService.Infrastructure.Repositories
 {
-    public class ProductRepository(AppDbContext context):IProductRepository
+    public class ProductRepository(AppDbContext context) : IProductRepository
     {
         public async Task<Product?> GetByIdAsync(int id)
         {
@@ -22,11 +22,11 @@ namespace ECommerce.OrderService.Infrastructure.Repositories
             return product != null && product.Stock >= quantity;
         }
 
-        public void Update(Product product)
+        public async Task UpdateAsync(Product product)
         {
             context.Products.Update(product);
-            context.SaveChanges();
-
+            await context.SaveChangesAsync();
         }
+
     }
 }

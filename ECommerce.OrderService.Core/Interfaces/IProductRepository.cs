@@ -7,6 +7,6 @@ namespace ECommerce.OrderService.Core.Interfaces
         Task<Product?> GetByIdAsync(int id);
         Task<List<Product>> GetAllAsync();
         Task<bool> IsStockAvailableAsync(int productId, int quantity);
-        void Update(Product product); 
+        Task UpdateAsync(Product product); 
     }
 }
