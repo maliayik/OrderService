@@ -14,7 +14,6 @@ namespace ECommerce.OrderService.Infrastructure.Repositories
                 .FirstOrDefaultAsync(o => o.Id == id);
         }
 
-
         public async Task<List<Order>> GetOrderByCustomerIdAsync(int customerId)
         {
             return await context.Orders
@@ -24,20 +23,17 @@ namespace ECommerce.OrderService.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-
         public async Task AddAsync(Order order)
         {
             await context.Orders.AddAsync(order);
             await context.SaveChangesAsync();
         }
 
-
-        public  Task Delete(Order order)
+        public Task Delete(Order order)
         {
             context.Orders.Remove(order!);
             context.SaveChangesAsync();
             return Task.CompletedTask;
         }
-
     }
 }

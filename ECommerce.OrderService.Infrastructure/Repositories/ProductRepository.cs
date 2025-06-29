@@ -12,6 +12,7 @@ namespace ECommerce.OrderService.Infrastructure.Repositories
                 .Where(p => ids.Contains(p.Id))
                 .ToListAsync();
         }
+
         public async Task<bool> IsStockAvailableAsync(int productId, int quantity)
         {
             var product = await context.Products.FindAsync(productId);
@@ -23,6 +24,5 @@ namespace ECommerce.OrderService.Infrastructure.Repositories
             context.Products.Update(product);
             await context.SaveChangesAsync();
         }
-
     }
 }

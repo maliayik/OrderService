@@ -1,5 +1,5 @@
-﻿using System.Text.Json.Serialization;
-using ECommerce.OrderService.Core.Entity;
+﻿using ECommerce.OrderService.Core.Entity;
+using System.Text.Json.Serialization;
 
 namespace ECommerce.OrderService.Application.DTOs
 {

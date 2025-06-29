@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ECommerce.OrderService.Core.Entity
+﻿namespace ECommerce.OrderService.Core.Entity
 {
     public class OrderItem
     {

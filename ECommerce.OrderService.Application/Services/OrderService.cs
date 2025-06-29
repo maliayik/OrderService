@@ -1,7 +1,6 @@
 ﻿using ECommerce.OrderService.Application.DTOs;
 using ECommerce.OrderService.Application.Extensions;
 using ECommerce.OrderService.Application.Interfaces;
-using ECommerce.OrderService.Core.Entity;
 using ECommerce.OrderService.Core.Interfaces;
 
 namespace ECommerce.OrderService.Application.Services
@@ -18,7 +17,7 @@ namespace ECommerce.OrderService.Application.Services
             foreach (var item in orderDto.OrderItems)
             {
                 if (!await productRepository.IsStockAvailableAsync(item.ProductId, item.Quantity))
-                    throw new Exception($"{products.Select(w=> w.Name)}Sipariş oluşturulamadı, yetersiz stok");
+                    throw new Exception($"{products.Select(w => w.Name)}Sipariş oluşturulamadı, yetersiz stok");
             }
 
             foreach (var item in orderDto.OrderItems)
@@ -44,7 +43,6 @@ namespace ECommerce.OrderService.Application.Services
                 throw new Exception("Kullanıcıya ait sipariş bulunmadı");
             }
             return orderByCustomerId.Select(o => o.ToDto()).ToList();
-
         }
 
         public async Task<OrderDto> GetOrderByIdAsync(int id)
