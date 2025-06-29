@@ -30,4 +30,5 @@ Basit bir e-ticaret sipariş yönetim sistemi API'si.
    git clone https://github.com/yourusername/OrderService.git
    cd OrderService
 2.Projeyi çalıştırın
+ ```bash
 dotnet run
