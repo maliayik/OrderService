@@ -6,7 +6,7 @@ namespace ECommerce.OrderService.Core.Entity
     {
         public int Id { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public int CustomerId { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.Now;
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;

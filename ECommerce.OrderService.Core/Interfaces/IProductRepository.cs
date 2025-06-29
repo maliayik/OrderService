@@ -4,9 +4,8 @@ namespace ECommerce.OrderService.Core.Interfaces
 {
     public interface IProductRepository
     {
-        Task<Product?> GetByIdAsync(int id);
-        Task<List<Product>> GetAllAsync();
+        Task<List<Product>> GetByIdsAsync(IEnumerable<int> ids);
         Task<bool> IsStockAvailableAsync(int productId, int quantity);
-        Task UpdateAsync(Product product); 
+        Task UpdateAsync(Product product);
     }
 }

@@ -9,19 +9,20 @@ namespace ECommerce.OrderService.Infrastructure
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.Property(p => p.Name).IsRequired().HasMaxLength(100);
                 entity.Property(p => p.Price).HasColumnType("decimal(18,2)").IsRequired();
                 entity.Property(p => p.Stock).IsRequired();
             });
-            
+
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.HasMany(o => o.OrderItems)
@@ -49,18 +50,38 @@ namespace ECommerce.OrderService.Infrastructure
                 {
                     new()
                     {
-                        Id = 1,Name = "Product 1", Stock = 100, Price = 10.99m
+                        Id = 1,Name = "Keyboard", Stock = 100, Price = 10.99m
                     },
                     new()
                     {
-                        Id = 2,Name = "Product 2", Stock = 50, Price = 20.99m
+                        Id = 2,Name = "Mouse", Stock = 50, Price = 20.99m
                     },
                     new()
                     {
-                        Id = 3,Name = "Product 3", Stock = 200, Price = 5.99m
+                        Id = 3,Name = "Headset", Stock = 200, Price = 5.99m
                     }
                 }
             );
+
+            modelBuilder.Entity<Customer>().HasData(
+                new List<Customer>
+                {
+                    new()
+                    {
+                        Id = 1, Name = "Mehmet", Address = "Istanbul"
+                    },
+                    new()
+                    {
+                        Id = 2, Name = "Ahmet", Address = "Ankara"
+                    },
+                    new()
+                    {
+                        Id = 3, Name = "Fatma", Address = "Izmir"
+                    }
+
+                });
+
+
         }
     }
 }

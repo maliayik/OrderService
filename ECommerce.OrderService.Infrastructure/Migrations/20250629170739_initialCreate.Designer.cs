@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250628220017_initialCreate")]
+    [Migration("20250629170739_initialCreate")]
     partial class initialCreate
     {
         /// <inheritdoc />
@@ -20,19 +20,58 @@ namespace ECommerce.OrderService.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.17");
 
+            modelBuilder.Entity("ECommerce.OrderService.Core.Entity.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "Istanbul",
+                            Name = "Mehmet"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "Ankara",
+                            Name = "Ahmet"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Address = "Izmir",
+                            Name = "Fatma"
+                        });
+                });
+
             modelBuilder.Entity("ECommerce.OrderService.Core.Entity.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("OrderStatus")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -56,7 +95,7 @@ namespace ECommerce.OrderService.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("UnitPrice")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -75,10 +114,11 @@ namespace ECommerce.OrderService.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Stock")
                         .HasColumnType("INTEGER");
@@ -91,21 +131,21 @@ namespace ECommerce.OrderService.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Product 1",
+                            Name = "Keyboard",
                             Price = 10.99m,
                             Stock = 100
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Product 2",
+                            Name = "Mouse",
                             Price = 20.99m,
                             Stock = 50
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Product 3",
+                            Name = "Headset",
                             Price = 5.99m,
                             Stock = 200
                         });
@@ -122,7 +162,7 @@ namespace ECommerce.OrderService.Infrastructure.Migrations
                     b.HasOne("ECommerce.OrderService.Core.Entity.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Order");

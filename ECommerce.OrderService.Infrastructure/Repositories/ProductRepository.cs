@@ -6,16 +6,12 @@ namespace ECommerce.OrderService.Infrastructure.Repositories
 {
     public class ProductRepository(AppDbContext context) : IProductRepository
     {
-        public async Task<Product?> GetByIdAsync(int id)
+        public async Task<List<Product>> GetByIdsAsync(IEnumerable<int> ids)
         {
-            return await context.Products.FindAsync(id);
+            return await context.Products
+                .Where(p => ids.Contains(p.Id))
+                .ToListAsync();
         }
-
-        public async Task<List<Product>> GetAllAsync()
-        {
-            return await context.Products.ToListAsync();
-        }
-
         public async Task<bool> IsStockAvailableAsync(int productId, int quantity)
         {
             var product = await context.Products.FindAsync(productId);

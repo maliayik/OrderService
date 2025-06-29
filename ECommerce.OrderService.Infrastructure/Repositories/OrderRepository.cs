@@ -10,15 +10,17 @@ namespace ECommerce.OrderService.Infrastructure.Repositories
         {
             return await context.Orders
                 .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
                 .FirstOrDefaultAsync(o => o.Id == id);
         }
 
 
-        public async Task<List<Order>> GetByUserIdAsync(int userId)
+        public async Task<List<Order>> GetOrderByCustomerIdAsync(int customerId)
         {
             return await context.Orders
                 .Include(o => o.OrderItems)
-                .Where(o => o.UserId == userId)
+                .ThenInclude(oi => oi.Product)
+                .Where(o => o.CustomerId == customerId)
                 .ToListAsync();
         }
 
@@ -30,13 +32,11 @@ namespace ECommerce.OrderService.Infrastructure.Repositories
         }
 
 
-        public void Delete(int id)
+        public  Task Delete(Order order)
         {
-            var order = context.Orders.Find(id);
-            if (order is not null)
-            {
-                context.Orders.Remove(order);
-            }
+            context.Orders.Remove(order!);
+            context.SaveChangesAsync();
+            return Task.CompletedTask;
         }
 
     }

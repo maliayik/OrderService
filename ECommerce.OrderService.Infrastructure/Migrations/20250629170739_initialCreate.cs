@@ -14,12 +14,26 @@ namespace ECommerce.OrderService.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CustomerId = table.Column<int>(type: "INTEGER", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
                     OrderStatus = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -34,9 +48,9 @@ namespace ECommerce.OrderService.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Stock = table.Column<int>(type: "INTEGER", nullable: false),
-                    Price = table.Column<decimal>(type: "TEXT", nullable: false)
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -52,7 +66,7 @@ namespace ECommerce.OrderService.Infrastructure.Migrations
                     OrderId = table.Column<int>(type: "INTEGER", nullable: false),
                     ProductId = table.Column<int>(type: "INTEGER", nullable: false),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    UnitPrice = table.Column<decimal>(type: "TEXT", nullable: false)
+                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -68,7 +82,17 @@ namespace ECommerce.OrderService.Infrastructure.Migrations
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Customers",
+                columns: new[] { "Id", "Address", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Istanbul", "Mehmet" },
+                    { 2, "Ankara", "Ahmet" },
+                    { 3, "Izmir", "Fatma" }
                 });
 
             migrationBuilder.InsertData(
@@ -76,9 +100,9 @@ namespace ECommerce.OrderService.Infrastructure.Migrations
                 columns: new[] { "Id", "Name", "Price", "Stock" },
                 values: new object[,]
                 {
-                    { 1, "Product 1", 10.99m, 100 },
-                    { 2, "Product 2", 20.99m, 50 },
-                    { 3, "Product 3", 5.99m, 200 }
+                    { 1, "Keyboard", 10.99m, 100 },
+                    { 2, "Mouse", 20.99m, 50 },
+                    { 3, "Headset", 5.99m, 200 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -95,6 +119,9 @@ namespace ECommerce.OrderService.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Customers");
+
             migrationBuilder.DropTable(
                 name: "OrderItems");
 

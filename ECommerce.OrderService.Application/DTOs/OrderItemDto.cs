@@ -1,4 +1,4 @@
 ﻿namespace ECommerce.OrderService.Application.DTOs
 {
-    public record OrderItemDto(int ProductId, int Quantity, decimal UnitPrice);
+    public record OrderItemDto(int ProductId,string ProductName, int Quantity,decimal UnitPrice,decimal TotalPrice);
 }

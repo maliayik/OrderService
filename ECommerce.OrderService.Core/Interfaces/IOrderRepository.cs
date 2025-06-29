@@ -5,8 +5,8 @@ namespace ECommerce.OrderService.Core.Interfaces
     public interface IOrderRepository
     {
         Task<Order?> GetByIdAsync(int id);
-        Task<List<Order>> GetByUserIdAsync(int userId);
+        Task<List<Order>> GetOrderByCustomerIdAsync(int customerId);
         Task AddAsync(Order order);
-        void Delete(int id);
+        Task Delete(Order order);
     }
 }
