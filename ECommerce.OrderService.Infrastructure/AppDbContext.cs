@@ -14,7 +14,36 @@ namespace ECommerce.OrderService.Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.Property(p => p.Name).IsRequired().HasMaxLength(100);
+                entity.Property(p => p.Price).HasColumnType("decimal(18,2)").IsRequired();
+                entity.Property(p => p.Stock).IsRequired();
+            });
+            
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.HasMany(o => o.OrderItems)
+                    .WithOne(oi => oi.Order)
+                    .HasForeignKey(oi => oi.OrderId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
 
+            modelBuilder.Entity<OrderItem>(entity =>
+            {
+                entity.Property(oi => oi.Quantity)
+                    .IsRequired();
+
+                entity.Property(oi => oi.UnitPrice)
+                    .IsRequired()
+                    .HasColumnType("decimal(18,2)");
+
+                entity.HasOne(oi => oi.Product)
+                    .WithMany()
+                    .HasForeignKey(oi => oi.ProductId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
             modelBuilder.Entity<Product>().HasData(
                 new List<Product>
                 {

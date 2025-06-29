@@ -8,7 +8,7 @@ namespace ECommerce.OrderService.Core.Entity
         [Required]
         public int UserId { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.Now;
-        public ICollection<OrderItem>? OrderItems { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
     }
 
