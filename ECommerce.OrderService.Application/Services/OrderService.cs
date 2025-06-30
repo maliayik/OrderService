@@ -14,21 +14,28 @@ namespace ECommerce.OrderService.Application.Services
             var productIds = orderDto.OrderItems.Select(i => i.ProductId).Distinct().ToList();
             var products = await productRepository.GetByIdsAsync(productIds);
 
+            var missingProductIds = productIds.Except(products.Select(p => p.Id)).ToList();
+            if (missingProductIds.Any())
+                throw new Exception($"Sistemde bulunamayan ürün ID'leri: [{string.Join(", ", missingProductIds)}]");
+
+            var insufficientProducts = new List<string>();
+            
             foreach (var item in orderDto.OrderItems)
             {
-                if (!await productRepository.IsStockAvailableAsync(item.ProductId, item.Quantity))
-                    throw new Exception($"{products.Select(w => w.Name)}Sipariş oluşturulamadı, yetersiz stok");
+                var product = products.First(p => p.Id == item.ProductId);
+
+                if (product.Stock < item.Quantity)
+                {
+                    insufficientProducts.Add(product.Name);
+                    continue;
+                }
+               
+                product.Stock -= item.Quantity;
+                await productRepository.UpdateAsync(product);
             }
 
-            foreach (var item in orderDto.OrderItems)
-            {
-                var product = products.FirstOrDefault(p => p.Id == item.ProductId);
-                if (product != null)
-                {
-                    product.Stock -= item.Quantity;
-                    await productRepository.UpdateAsync(product);
-                }
-            }
+            if (insufficientProducts.Any())
+                throw new Exception($"Sipariş oluşturulamadı. Stok yetersiz: {string.Join(", ", insufficientProducts)}");
 
             var order = orderDto.ToEntity(products);
             await orderRepository.AddAsync(order);
